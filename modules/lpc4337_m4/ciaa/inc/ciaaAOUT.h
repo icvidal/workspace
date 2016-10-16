@@ -36,7 +36,15 @@
 
 #include "chip.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void ciaaAOUTInit(void);
 void ciaaAOUTSet(float level);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CIAAAOUT_H_ */

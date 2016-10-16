@@ -36,8 +36,16 @@
 
 #include "chip.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void ciaaI2CInit(void);
 Status ciaaI2CWrite(uint8_t sl_addr, uint8_t * buffer, int len);
 Status ciaaI2CRead(uint8_t sl_addr, uint8_t * buffer, int len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CIAAI2C_H_ */

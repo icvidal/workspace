@@ -9,6 +9,7 @@
 
 
  GROUP(
+ librdimon.a
  libgcc.a
  libc.a
  libm.a

@@ -30,31 +30,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
- 
-#ifndef CIAAIO_H_
-#define CIAAIO_H_
 
-#include "chip.h"
+#ifndef _MAIN_H_
+#define _MAIN_H_
+
+/** \addtogroup blink Bare-metal blink example
+ ** @{ */
+
+/*==================[inclusions]=============================================*/
+
+/*==================[cplusplus]==============================================*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define ciaaDigitalInputs() ((uint8_t)((Chip_GPIO_ReadValue(LPC_GPIO_PORT,3) & (0x0F<<11))>>7)|(Chip_GPIO_ReadValue(LPC_GPIO_PORT,2) & 0x0F))
+/*==================[macros]=================================================*/
 
-typedef struct
-{
-	int port;
-	int bit;
-}ciaaPin_t;
+/** delay in milliseconds */
+#define DELAY_MS 500
 
-void ciaaIOInit(void);
-uint32_t ciaaWriteOutput(uint32_t outputNumber, uint32_t value);
-uint32_t ciaaReadInput(uint32_t inputNumber);
-void ciaaToggleOutput(uint32_t outputNumber);
+/** led number to toggle */
+#define LED 0
+
+/*==================[typedef]================================================*/
+
+/*==================[external data declaration]==============================*/
+
+/*==================[external functions declaration]=========================*/
+
+/** @brief main function
+ * @return main function should never return
+ */
+int main(void);
+
+/*==================[cplusplus]==============================================*/
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* CIAAIO_H_ */
+/** @} doxygen end group definition */
+/*==================[end of file]============================================*/
+#endif /* #ifndef _MAIN_H_ */

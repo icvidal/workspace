@@ -46,8 +46,13 @@ OBJ_PATH = $(OUT_PATH)/obj
 SYMBOLS += -DDEBUG -DCORE_M0PLUS -D__USE_LPCOPEN -D__CODE_RED \
            -D__MTB_BUFFER_SIZE=256 -D__USE_ROMDIVIDE
 
+XSYMBOLS += $(SYMBOLS) -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS
+
 # Compilation flags
 CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m0 -mthumb -fdata-sections -ffunction-sections -fmessage-length=0 -fno-builtin
+
+# Compilation CXX flags
+CXXFLAGS := -Wall -ggdb3 -mcpu=cortex-m0 -mthumb -fdata-sections -ffunction-sections -fmessage-length=0 -fno-builtin
 
 # Linking flags
 LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m0 -mthumb \

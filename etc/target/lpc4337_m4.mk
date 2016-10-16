@@ -47,9 +47,15 @@ SYMBOLS += -DDEBUG -DCORE_M4 -D__USE_LPCOPEN -D__LPC43XX__ -D__CODE_RED \
            -DLPC43_MULTICORE_M0APP -D__MULTICORE_MASTER \
 					 -D__MULTICORE_MASTER_SLAVE_M0APP
 
+XSYMBOLS += $(SYMBOLS) -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS
+
 # Compilation flags
 CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 \
            -mfloat-abi=softfp -fdata-sections -ffunction-sections
+
+# Compliation CXX flags
+CXXFLAGS := -Wall -ggdb3 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 \
+	   -mfloat-abi=softfp -fdata-sections -ffunction-sections
 
 # Linking flags
 LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 \

@@ -37,6 +37,10 @@
 #include "chip.h"
 #include "string.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum _ciaaUarts_e
 {
 	CIAA_UART_485 = 0,
@@ -61,5 +65,9 @@ typedef struct _uartData
 void ciaaUARTInit(void);
 int uartSend(ciaaUART_e nUART, void * data, int datalen);
 int uartRecv(ciaaUART_e nUART, void * data, int datalen);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CIAAUART_H_ */

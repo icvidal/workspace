@@ -36,7 +36,15 @@
 
 #include "chip.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void ciaaAINInit(void);
 uint16_t ciaaAINRead(uint8_t input);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CIAAAIN_H_ */

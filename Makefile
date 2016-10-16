@@ -1,6 +1,10 @@
 # Copyright 2016, Pablo Ridolfi
 # All rights reserved.
 #
+# Changes:
+# 2016-10-16: Iván Castellucci Vidal <ivanc.vidal@gmail.com>
+# 	Added support for C++ projects.
+#
 # This file is part of Workspace.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -34,6 +38,8 @@
 PROJECT ?= examples/blinky
 TARGET ?= lpc4337_m4
 BOARD ?= edu_ciaa_nxp
+CC := gcc
+CXX := g++
 
 include $(PROJECT)/Makefile
 
@@ -47,6 +53,8 @@ PROJECT_OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(PROJECT_C_FILES:.c=.o))
 
 PROJECT_OBJ_FILES += $(addprefix $(OBJ_PATH)/,$(notdir $(PROJECT_ASM_FILES:.S=.o)))
 
+PROJECT_OBJ_FILES += $(addprefix $(OBJ_PATH)/,$(notdir $(PROJECT_CXX_FILES:.cpp=.o)))
+
 PROJECT_OBJS := $(notdir $(PROJECT_OBJ_FILES))
 
 INCLUDES := $(addprefix -I,$(PROJECT_INC_FOLDERS)) \
@@ -54,6 +62,7 @@ INCLUDES := $(addprefix -I,$(PROJECT_INC_FOLDERS)) \
 
 vpath %.o $(OBJ_PATH)
 vpath %.c $(PROJECT_SRC_FOLDERS) $(foreach MOD,$(notdir $(PROJECT_MODULES)),$($(MOD)_SRC_FOLDERS))
+vpath %.cpp $(PROJECT_SRC_FOLDERS) $(foreach MOD,$(notdir $(PROJECT_MODULES)),$($(MOD)_SRC_FOLDERS))
 vpath %.S $(PROJECT_SRC_FOLDERS) $(foreach MOD,$(notdir $(PROJECT_MODULES)),$($(MOD)_SRC_FOLDERS))
 vpath %.a $(OUT_PATH)
 
@@ -66,17 +75,23 @@ lib$(1).a: $(2)
 	@$(CROSS_PREFIX)size $(OUT_PATH)/lib$(1).a
 endef
 
-$(foreach MOD,$(notdir $(PROJECT_MODULES)), $(eval $(call makemod,$(MOD),$(notdir $(patsubst %.c,%.o,$(patsubst %.S,%.o,$($(MOD)_SRC_FILES)))))))
+$(foreach MOD,$(notdir $(PROJECT_MODULES)), $(eval $(call makemod,$(MOD),$(notdir $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(patsubst %.cpp,%.o,$($(MOD)_SRC_FILES))))))))
 
 %.o: %.c
 	@echo "*** compiling C file $< ***"
-	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
-	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -MM > $(OBJ_PATH)/$(@:.o=.d)
+	@$(CROSS_PREFIX)$(CC) $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)$(CC) $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -MM > $(OBJ_PATH)/$(@:.o=.d)
 
 %.o: %.S
 	@echo "*** compiling asm file $< ***"
-	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
-	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -MM > $(OBJ_PATH)/$(@:.o=.d)
+	@$(CROSS_PREFIX)$(CC) $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)$(CC) $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -MM > $(OBJ_PATH)/$(@:.o=.d)
+
+%.o: %.cpp
+	@echo "*** compiling C++ file $< ***"
+	@$(CROSS_PREFIX)$(CXX) $(XSYMBOLS) $(CXXFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)$(CXX) $(XSYMBOLS) $(CXXFLAGS) $(INCLUDES) -c $< -MM > $(OBJ_PATH)/$(@:.o=.d)
+
 
 -include $(wildcard $(OBJ_PATH)/*.d)
 
@@ -84,7 +99,7 @@ all : $(PROJECT_NAME)
 
 $(PROJECT_NAME): $(foreach MOD,$(notdir $(PROJECT_MODULES)),lib$(MOD).a) $(PROJECT_OBJS)
 	@echo "*** linking project $@ ***"
-	@$(CROSS_PREFIX)gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(PROJECT_NAME).axf $(PROJECT_OBJ_FILES) $(SLAVE_OBJ_FILE) -L$(OUT_PATH) $(addprefix -l,$(notdir $(PROJECT_MODULES))) $(addprefix -L,$(EXTERN_LIB_FOLDERS)) $(addprefix -l,$(notdir $(EXTERN_LIBS)))
+	@$(CROSS_PREFIX)$(CXX) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(PROJECT_NAME).axf $(PROJECT_OBJ_FILES) $(SLAVE_OBJ_FILE) -L$(OUT_PATH) $(addprefix -l,$(notdir $(PROJECT_MODULES))) $(addprefix -L,$(EXTERN_LIB_FOLDERS)) $(addprefix -l,$(notdir $(EXTERN_LIBS)))
 	@$(CROSS_PREFIX)size $(OUT_PATH)/$(PROJECT_NAME).axf
 	@$(CROSS_PREFIX)objcopy -v -O binary $(OUT_PATH)/$(PROJECT_NAME).axf $(OUT_PATH)/$(PROJECT_NAME).bin
 	@echo "*** post-build ***"

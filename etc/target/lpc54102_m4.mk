@@ -46,9 +46,15 @@ OBJ_PATH = $(OUT_PATH)/obj
 SYMBOLS += -DDEBUG -DCORE_M4 -D__USE_LPCOPEN -D__LPC5410X__ -D__CODE_RED \
            -D__MULTICORE_MASTER -D__MULTICORE_MASTER_SLAVE_M0SLAVE
 
+XSYMBOLS += $(SYMBOLS) -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS
+
 # Compilation flags
 CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 \
            -mfloat-abi=softfp -fdata-sections -ffunction-sections
+
+# Compilation CXX flags
+CXXFLAGS := -Wall -ggdb3 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 \
+	   -mfloat-abi=softfp -fdata-sections -ffunction-sections
 
 # Linking flags
 LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 \

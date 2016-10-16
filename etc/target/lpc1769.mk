@@ -44,9 +44,15 @@ CROSS_PREFIX ?= arm-none-eabi-
 # Defined symbols
 SYMBOLS := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__ -D__CODE_RED
 
+XSYMBOLS += $(SYMBOLS) -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS
+
 # Compilation flags
 CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections \
            -ffunction-sections -c
+
+# Compilation CXX flags
+CXXFLAGS := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections \
+	   -ffunction-sections -c
 
 # Linking flags
 LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker \

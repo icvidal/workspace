@@ -37,10 +37,18 @@
 #include "chip.h"
 #include "ciaaI2C.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void mem48Read(uint8_t addr, void * buffer, int len);
 void mem48Write(uint8_t addr, void * buffer, int len);
 void memRead(uint16_t addr, void * buffer, int len);
 void memWrite(uint16_t addr, void * buffer, int len);
 void ciaaNVMInit(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CIAANVM_H_ */
